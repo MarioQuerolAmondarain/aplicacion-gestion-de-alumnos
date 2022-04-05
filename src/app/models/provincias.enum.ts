@@ -1,4 +1,4 @@
-enum Provincias{
+export enum Provincias{
   A_Coruña,
   Alava,
   Albacete,
