@@ -1,3 +1,5 @@
+import { Alumno } from './models/alumno.model';
+import { AlumnosService } from './services/alumnos.service';
 import { Component } from '@angular/core';
 
 @Component({
