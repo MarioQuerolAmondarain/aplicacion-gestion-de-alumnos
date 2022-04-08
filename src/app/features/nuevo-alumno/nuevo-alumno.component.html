@@ -1,58 +1,68 @@
 <form [formGroup]="nuevoAlumnoForm" (ngSubmit)="submitForm()">
-  <mat-form-field class="input" appearance="fill">
+  <mat-form-field class="input" appearance="outline">
     <mat-label>Nombre</mat-label>
     <input matInput formControlName="nombre" type="text">
   </mat-form-field>
 
-  <mat-form-field class="input" appearance="fill">
+  <mat-form-field class="input" appearance="outline">
     <mat-label>Primer apellido</mat-label>
     <input matInput formControlName="apellido1" type="text">
   </mat-form-field>
 
-  <mat-form-field class="input" appearance="fill">
+  <mat-form-field class="input" appearance="outline">
     <mat-label>Segundo apellido</mat-label>
     <input matInput formControlName="apellido2" type="text">
   </mat-form-field>
 
-  <mat-form-field class="input" appearance="fill">
+  <mat-form-field class="input" appearance="outline">
     <mat-label>Email</mat-label>
     <input matInput formControlName="email" type="text">
   </mat-form-field>
 
-  <mat-form-field class="input" appearance="fill">
+  <mat-form-field class="input" appearance="outline">
     <mat-label>DNI</mat-label>
-    <input matInput formControlName="email" type="text">
+    <input matInput formControlName="dni" type="text">
   </mat-form-field>
 
-  <mat-form-field class="input" appearance="fill">
+  <mat-form-field class="input" appearance="outline">
     <mat-label>Teléfono</mat-label>
     <input matInput formControlName="tlf" type="text">
   </mat-form-field>
 
-  <mat-form-field class="input" appearance="fill">
+  <mat-form-field class="input" appearance="outline">
     <mat-label>Otro teléfono</mat-label>
     <input matInput formControlName="tlf2" type="text">
   </mat-form-field>
 
-  <mat-form-field class="input" appearance="fill">
+  <mat-form-field class="input" appearance="outline">
     <mat-label>País</mat-label>
     <input matInput formControlName="pais" type="text">
   </mat-form-field>
 
-  <mat-form-field class="input" appearance="fill">
+  <mat-form-field class="input" appearance="outline">
     <mat-label>Provincia</mat-label>
     <input matInput formControlName="provincia" type="text">
   </mat-form-field>
 
-  <mat-form-field class="input" appearance="fill">
+  <mat-form-field class="input" appearance="outline">
     <mat-label>Codigo Postal</mat-label>
     <input matInput formControlName="codigoPostal" type="text">
   </mat-form-field>
 
-  <mat-form-field class="input" appearance="fill">
+  <mat-form-field class="input" appearance="outline">
     <mat-label>Localidad</mat-label>
     <input matInput formControlName="localidad" type="text">
   </mat-form-field>
 
-  <button (click)="this.alumnosService.addAlumno(alumno)">Add</button>
+  <mat-form-field class="input" appearance="outline">
+    <mat-label>NickName</mat-label>
+    <input matInput formControlName="nickName" type="text">
+  </mat-form-field>
+
+  <mat-form-field class="input" appearance="outline">
+    <mat-label>Contraseña</mat-label>
+    <input matInput formControlName="password" type="password">
+  </mat-form-field>
+
 </form>
+<button mat-raised-button color="primary" (click)="this.submitForm()">Añadir alumno</button>

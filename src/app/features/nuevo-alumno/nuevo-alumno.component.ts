@@ -9,20 +9,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./nuevo-alumno.component.scss'],
 })
 export class NuevoAlumnoComponent implements OnInit {
-  alumno = {
-    nombre: 'Mario',
-    apellido1: 'Querol',
-    email: 'mario@devanddel.com',
-    dni: '54351276E',
-    tlf: '675872274',
-    pais: 'España',
-    provincia: 'Madrid',
-    codigoPostal: 28033,
-    localidad: 'Madrid',
-    nickName: 'Mario',
-    password: '123456',
-  } as Alumno;
-
   nuevoAlumnoForm: FormGroup;
 
   constructor(public alumnosService: AlumnosService) {
@@ -31,7 +17,7 @@ export class NuevoAlumnoComponent implements OnInit {
       apellido1: new FormControl('', [Validators.required]),
       apellido2: new FormControl(''),
       email: new FormControl('', [Validators.required, Validators.email]),
-      dni: new FormControl('', [Validators.required, Validators.pattern("^[a-z]{3}[0-9]{6}[a-z]?$")]),
+      dni: new FormControl('', [Validators.required, Validators.pattern("^[0-9]{8}[A-Z]?$")]),
       tlf: new FormControl('', [Validators.required, Validators.pattern("[0-9]{9}")]),
       tlf2: new FormControl('', [Validators.pattern("[0-9]{9}")]),
       pais: new FormControl(''),
@@ -46,6 +32,21 @@ export class NuevoAlumnoComponent implements OnInit {
   ngOnInit(): void {}
 
   submitForm() {
-    alert('Nuevo alumnos');
+    console.log("New alumn create");
+    this.alumnosService.addAlumno(new Alumno(
+      this.nuevoAlumnoForm.get('nombre')?.value,
+      this.nuevoAlumnoForm.get('apellido1')?.value,
+      this.nuevoAlumnoForm.get('email')?.value,
+      this.nuevoAlumnoForm.get('dni')?.value,
+      this.nuevoAlumnoForm.get('tlf')?.value,
+      this.nuevoAlumnoForm.get('pais')?.value,
+      this.nuevoAlumnoForm.get('provincia')?.value,
+      this.nuevoAlumnoForm.get('codigoPostal')?.value,
+      this.nuevoAlumnoForm.get('localidad')?.value,
+      this.nuevoAlumnoForm.get('nickName')?.value,
+      this.nuevoAlumnoForm.get('password')?.value,
+      this.nuevoAlumnoForm.get('tlf2')?.value,
+      this.nuevoAlumnoForm.get('apellido2')?.value,
+    ));
   }
 }
