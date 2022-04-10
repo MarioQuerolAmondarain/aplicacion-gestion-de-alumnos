@@ -11,7 +11,7 @@ import { AppComponent } from './app.component';
 import { EditarAlumnoComponent } from './features/editar-alumno/editar-alumno.component';
 import { ListadoAlumnosComponent } from './features/listado-alumnos/listado-alumnos.component';
 import { NuevoAlumnoComponent } from './features/nuevo-alumno/nuevo-alumno.component';
-
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -29,8 +29,9 @@ import { NuevoAlumnoComponent } from './features/nuevo-alumno/nuevo-alumno.compo
     MatTableModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
-  ],
+    MatIconModule,
+    MatDialogModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

@@ -59,10 +59,13 @@
     <input matInput formControlName="nickName" type="text">
   </mat-form-field>
 
-  <mat-form-field class="input" appearance="outline">
+  <mat-form-field class="input" appearance="outline" *ngIf="!this.editar">
     <mat-label>Contraseña</mat-label>
     <input matInput formControlName="password" type="password">
   </mat-form-field>
 
 </form>
-<button mat-raised-button color="primary" (click)="this.submitForm()">Añadir alumno</button>
+<button mat-raised-button color="primary" (click)="this.submitForm()">
+  <span *ngIf="!this.editar">Añadir alumno</span>
+  <span *ngIf="this.editar">Actualizar alumno</span>
+</button>

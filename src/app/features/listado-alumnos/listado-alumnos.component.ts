@@ -1,8 +1,8 @@
-import { FormGroup, FormControl } from '@angular/forms';
-import { AlumnosService } from './../../services/alumnos.service';
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Alumno } from 'src/app/models/alumno.model';
-import { Observable } from 'rxjs/internal/Observable';
+import { AlumnosService } from './../../services/alumnos.service';
+import { EditarAlumnoComponent } from './../editar-alumno/editar-alumno.component';
 
 @Component({
   selector: 'app-listado-alumnos',
@@ -27,7 +27,7 @@ export class ListadoAlumnosComponent implements OnInit{
     "eliminar"
   ];
 
-  constructor(private alumnosService: AlumnosService) {
+  constructor(private alumnosService: AlumnosService, private matDialog: MatDialog) {
     let alumnos = this.alumnosService.getAlumnos();
     this.dataSource = !!alumnos ? alumnos : [];
   }
@@ -40,9 +40,12 @@ export class ListadoAlumnosComponent implements OnInit{
     this.reloadLista();
   }
 
-  viewAlumno(name: string){
-    alert(name);
+  viewAlumno(dni: string){
+    const dialogRef = this.matDialog.open(EditarAlumnoComponent, {
+      data: {dni: dni}
+    });
     this.reloadLista();
+    this.alumnosService.setAlumnoEdit(dni);
   }
 
   reloadLista(){
