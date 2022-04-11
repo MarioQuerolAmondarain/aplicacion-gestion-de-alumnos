@@ -14,6 +14,7 @@ import { EditarAlumnoComponent } from './features/editar-alumno/editar-alumno.co
 import { ListadoAlumnosComponent } from './features/listado-alumnos/listado-alumnos.component';
 import { NuevoAlumnoComponent } from './features/nuevo-alumno/nuevo-alumno.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,7 +34,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatIconModule,
     MatDialogModule,
     MatSelectModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatProgressBarModule
     ],
   providers: [],
   bootstrap: [AppComponent]

@@ -2,11 +2,13 @@
   <mat-form-field class="input" appearance="outline">
     <mat-label>Nombre</mat-label>
     <input matInput formControlName="nombre" type="text" />
+    <mat-error *ngIf="this.nuevoAlumnoForm.get('nombre')!.invalid">Obligatorio</mat-error>
   </mat-form-field>
 
   <mat-form-field class="input" appearance="outline">
     <mat-label>Primer apellido</mat-label>
     <input matInput formControlName="apellido1" type="text" />
+    <mat-error *ngIf="this.nuevoAlumnoForm.get('apellido1')!.invalid">Obligatorio</mat-error>
   </mat-form-field>
 
   <mat-form-field class="input" appearance="outline">
@@ -17,21 +19,25 @@
   <mat-form-field class="input" appearance="outline">
     <mat-label>Email</mat-label>
     <input matInput formControlName="email" type="text" />
+    <mat-error *ngIf="this.nuevoAlumnoForm.get('email')!.hasError('email')">Correo no válido</mat-error>
   </mat-form-field>
 
   <mat-form-field class="input" appearance="outline">
     <mat-label>DNI</mat-label>
     <input matInput formControlName="dni" type="text" />
+    <mat-error *ngIf="this.nuevoAlumnoForm.get('dni')!.invalid">DNI no válido</mat-error>
   </mat-form-field>
 
   <mat-form-field class="input" appearance="outline">
     <mat-label>Teléfono</mat-label>
     <input matInput formControlName="tlf" type="text" />
+    <mat-error *ngIf="this.nuevoAlumnoForm.get('tlf')!.invalid">Télefono no válido</mat-error>
   </mat-form-field>
 
   <mat-form-field class="input" appearance="outline">
     <mat-label>Otro teléfono</mat-label>
     <input matInput formControlName="tlf2" type="text" />
+    <mat-error *ngIf="this.nuevoAlumnoForm.get('tlf2')!.invalid">Télefono no válido</mat-error>
   </mat-form-field>
 
   <mat-form-field class="example-full-width" appearance="outline">
@@ -52,6 +58,7 @@
         {{ option }}
       </mat-option>
     </mat-autocomplete>
+    <mat-error *ngIf="this.nuevoAlumnoForm.get('pais')!.invalid">País no válido</mat-error>
   </mat-form-field>
 
   <mat-form-field
@@ -61,6 +68,7 @@
   >
     <mat-label>Provincia</mat-label>
     <input matInput formControlName="provincia" type="text" />
+    <mat-error *ngIf="this.nuevoAlumnoForm.get('provincia')!.invalid">Provincia no válida</mat-error>
   </mat-form-field>
 
   <mat-form-field
@@ -85,28 +93,36 @@
         {{ option }}
       </mat-option>
     </mat-autocomplete>
+    <mat-error *ngIf="this.nuevoAlumnoForm.get('provincia')!.invalid">Provincia no válida</mat-error>
   </mat-form-field>
 
   <mat-form-field class="input" appearance="outline">
     <mat-label>Codigo Postal</mat-label>
     <input matInput formControlName="codigoPostal" type="text" />
+    <mat-error *ngIf="this.nuevoAlumnoForm.get('codigoPostal')!.invalid">Código postal no válido</mat-error>
   </mat-form-field>
 
   <mat-form-field class="input" appearance="outline">
     <mat-label>Localidad</mat-label>
     <input matInput formControlName="localidad" type="text" />
+    <mat-error *ngIf="this.nuevoAlumnoForm.get('localidad')!.invalid">Obligatorio</mat-error>
   </mat-form-field>
 
   <mat-form-field class="input" appearance="outline">
     <mat-label>NickName</mat-label>
     <input matInput formControlName="nickName" type="text" />
+    <mat-error *ngIf="this.nuevoAlumnoForm.get('nickName')!.invalid">Obligatorio</mat-error>
   </mat-form-field>
 
-  <mat-form-field class="input" appearance="outline" *ngIf="!this.editar">
-    <mat-label>Contraseña</mat-label>
-    <input matInput formControlName="password" type="password" />
-  </mat-form-field>
+  <div>
+    <mat-form-field class="input" appearance="outline" *ngIf="!this.editar" style="width: 100%;">
+      <mat-label>Contraseña</mat-label>
+      <input matInput formControlName="password" type="password" />
+    </mat-form-field>
+    <mat-progress-bar mode="determinate" value="{{fortalezaPassword()}}" ></mat-progress-bar>
+  </div>
 </form>
+<br>
 <button mat-raised-button color="primary" (click)="this.submitForm()" [disabled]="!isValid()">
   <span *ngIf="!this.editar">Añadir alumno</span>
   <span *ngIf="this.editar">Actualizar alumno</span>

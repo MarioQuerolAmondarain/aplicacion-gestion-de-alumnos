@@ -270,7 +270,7 @@ export class NuevoAlumnoComponent implements OnInit {
 
   constructor(public alumnosService: AlumnosService) {
     this.nuevoAlumnoForm = new FormGroup({
-      nombre: new FormControl(this.alumnosService.editarAlumno()?.nombre, [
+      nombre: new FormControl('', [
         Validators.required,
       ]),
       apellido1: new FormControl('', [Validators.required]),
@@ -316,34 +316,90 @@ export class NuevoAlumnoComponent implements OnInit {
   }
 
   isValid(): boolean {
+    if (this.editar) {
+      return true;
+    }
+
     if (
-      !this.nuevoAlumnoForm.get('nombre')!.valid ||
-      !this.nuevoAlumnoForm.get('apellido1')!.valid ||
-      !this.nuevoAlumnoForm.get('apellido2')!.valid ||
-      !this.nuevoAlumnoForm.get('email')!.valid ||
-      !this.nuevoAlumnoForm.get('email')!.valid ||
-      !this.nuevoAlumnoForm.get('dni')!.valid ||
-      !this.nuevoAlumnoForm.get('tlf')!.valid ||
-      !this.nuevoAlumnoForm.get('pais')!.valid ||
-      !this.nuevoAlumnoForm.get('provincia')!.valid ||
-      !this.nuevoAlumnoForm.get('codigoPostal')!.valid ||
-      !this.nuevoAlumnoForm.get('localidad')!.valid ||
-      !this.nuevoAlumnoForm.get('nickName')!.valid ||
-      !this.nuevoAlumnoForm.get('password')!.valid
+      this.nuevoAlumnoForm.get('nombre')!.invalid ||
+      this.nuevoAlumnoForm.get('apellido1')!.invalid ||
+      this.nuevoAlumnoForm.get('apellido2')!.invalid ||
+      this.nuevoAlumnoForm.get('email')!.invalid ||
+      this.nuevoAlumnoForm.get('email')!.invalid ||
+      this.nuevoAlumnoForm.get('dni')!.invalid ||
+      this.nuevoAlumnoForm.get('tlf')!.invalid ||
+      this.nuevoAlumnoForm.get('pais')!.invalid ||
+      this.nuevoAlumnoForm.get('provincia')!.invalid ||
+      this.nuevoAlumnoForm.get('codigoPostal')!.invalid ||
+      this.nuevoAlumnoForm.get('localidad')!.invalid ||
+      this.nuevoAlumnoForm.get('nickName')!.invalid ||
+      this.nuevoAlumnoForm.get('password')!.invalid ||
+      this.paises.find((pais) => {
+        return pais === this.nuevoAlumnoForm.get('pais')!.value;
+      }) ||
+      this.fortalezaPassword() < 8
     ) {
+      console.log("no válido");
       return false;
     }
 
-    if(this.validarDNI()){
-
+    if (
+      !this.provincias.find((pais) => {
+        return pais === this.nuevoAlumnoForm.get('pais')!.value;
+      }) &&
+      this.nuevoAlumnoForm.get('pais')?.value === 'España'
+    ) {
+      console.log("no provincia");
+      return false;
     }
-
+    console.log("Es válido");
     return true;
   }
 
-  private validarDNI(): boolean{
-    return false;
+  fortalezaPassword(): number {
+    let password = this.nuevoAlumnoForm.get('password')?.value;
+    let fortaleza = 0 ;
+    let maximoPuntos = true;
+
+    if (7 <= password.length && password.length <= 8) {
+      fortaleza++;
+      maximoPuntos = false;
+    } else if (9 <= password.length && password.length <= 12) {
+      maximoPuntos = false;
+      fortaleza += 2;
+    } else if (12 <= password.length) {
+      fortaleza += 3;
+    }
+
+    if (/[A-Z]/.test(password)) {
+      fortaleza++;
+    } else {
+      maximoPuntos = false;
+    }
+
+    if (/[a-z]/.test(password)) {
+      fortaleza++;
+    } else {
+      maximoPuntos = false;
+    }
+
+    if(/[a-z]/.test(password) && /[A-Z]/.test(password)){
+      fortaleza += 2;
+    }
+
+    // Intervalo de simbolos en ASCII
+    if (/[!-@]/.test(password)) {
+      fortaleza++;
+    } else {
+      maximoPuntos = false;
+    }
+
+    if (maximoPuntos) {
+      fortaleza++;
+    }
+    return fortaleza * 8.3;
   }
+
   cargarDatosAlumno() {
     let alumno = this.alumnosService.editarAlumno();
     return {
