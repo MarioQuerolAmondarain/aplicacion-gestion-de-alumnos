@@ -1,8 +1,11 @@
+import { Observable } from 'rxjs/internal/Observable';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Alumno } from 'src/app/models/alumno.model';
 import { AlumnosService } from './../../services/alumnos.service';
 import { EditarAlumnoComponent } from './../editar-alumno/editar-alumno.component';
+import { of } from 'rxjs';
+import { observeNotification } from 'rxjs/internal/Notification';
 
 @Component({
   selector: 'app-listado-alumnos',

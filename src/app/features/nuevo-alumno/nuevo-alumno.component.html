@@ -1,71 +1,113 @@
 <form [formGroup]="nuevoAlumnoForm" (ngSubmit)="submitForm()">
   <mat-form-field class="input" appearance="outline">
     <mat-label>Nombre</mat-label>
-    <input matInput formControlName="nombre" type="text">
+    <input matInput formControlName="nombre" type="text" />
   </mat-form-field>
 
   <mat-form-field class="input" appearance="outline">
     <mat-label>Primer apellido</mat-label>
-    <input matInput formControlName="apellido1" type="text">
+    <input matInput formControlName="apellido1" type="text" />
   </mat-form-field>
 
   <mat-form-field class="input" appearance="outline">
     <mat-label>Segundo apellido</mat-label>
-    <input matInput formControlName="apellido2" type="text">
+    <input matInput formControlName="apellido2" type="text" />
   </mat-form-field>
 
   <mat-form-field class="input" appearance="outline">
     <mat-label>Email</mat-label>
-    <input matInput formControlName="email" type="text">
+    <input matInput formControlName="email" type="text" />
   </mat-form-field>
 
   <mat-form-field class="input" appearance="outline">
     <mat-label>DNI</mat-label>
-    <input matInput formControlName="dni" type="text">
+    <input matInput formControlName="dni" type="text" />
   </mat-form-field>
 
   <mat-form-field class="input" appearance="outline">
     <mat-label>Teléfono</mat-label>
-    <input matInput formControlName="tlf" type="text">
+    <input matInput formControlName="tlf" type="text" />
   </mat-form-field>
 
   <mat-form-field class="input" appearance="outline">
     <mat-label>Otro teléfono</mat-label>
-    <input matInput formControlName="tlf2" type="text">
+    <input matInput formControlName="tlf2" type="text" />
   </mat-form-field>
 
-  <mat-form-field class="input" appearance="outline">
+  <mat-form-field class="example-full-width" appearance="outline">
     <mat-label>País</mat-label>
-    <input matInput formControlName="pais" type="text">
+    <input
+      type="text"
+      placeholder="Pick one"
+      aria-label="Number"
+      matInput
+      formControlName="pais"
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+      <mat-option
+        *ngFor="let option of filteredOptionsPaises | async"
+        [value]="option"
+      >
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
   </mat-form-field>
 
-  <mat-form-field class="input" appearance="outline">
+  <mat-form-field
+    class="input"
+    appearance="outline"
+    *ngIf="this.nuevoAlumnoForm.get('pais')?.value !== 'España'"
+  >
     <mat-label>Provincia</mat-label>
-    <input matInput formControlName="provincia" type="text">
+    <input matInput formControlName="provincia" type="text" />
+  </mat-form-field>
+
+  <mat-form-field
+    class="input"
+    appearance="outline"
+    *ngIf="this.nuevoAlumnoForm.get('pais')?.value === 'España'"
+  >
+    <mat-label>Provincia</mat-label>
+    <input
+      type="text"
+      placeholder="Pick one"
+      aria-label="Number"
+      matInput
+      formControlName="provincia"
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+      <mat-option
+        *ngFor="let option of filteredOptionsProvincias | async"
+        [value]="option"
+      >
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
   </mat-form-field>
 
   <mat-form-field class="input" appearance="outline">
     <mat-label>Codigo Postal</mat-label>
-    <input matInput formControlName="codigoPostal" type="text">
+    <input matInput formControlName="codigoPostal" type="text" />
   </mat-form-field>
 
   <mat-form-field class="input" appearance="outline">
     <mat-label>Localidad</mat-label>
-    <input matInput formControlName="localidad" type="text">
+    <input matInput formControlName="localidad" type="text" />
   </mat-form-field>
 
   <mat-form-field class="input" appearance="outline">
     <mat-label>NickName</mat-label>
-    <input matInput formControlName="nickName" type="text">
+    <input matInput formControlName="nickName" type="text" />
   </mat-form-field>
 
   <mat-form-field class="input" appearance="outline" *ngIf="!this.editar">
     <mat-label>Contraseña</mat-label>
-    <input matInput formControlName="password" type="password">
+    <input matInput formControlName="password" type="password" />
   </mat-form-field>
-
 </form>
-<button mat-raised-button color="primary" (click)="this.submitForm()">
+<button mat-raised-button color="primary" (click)="this.submitForm()" [disabled]="!isValid()">
   <span *ngIf="!this.editar">Añadir alumno</span>
   <span *ngIf="this.editar">Actualizar alumno</span>
 </button>
