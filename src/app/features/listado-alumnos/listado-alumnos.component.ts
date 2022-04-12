@@ -31,23 +31,25 @@ export class ListadoAlumnosComponent implements OnInit{
   ];
 
   constructor(private alumnosService: AlumnosService, private matDialog: MatDialog) {
-    let alumnos = this.alumnosService.getAlumnos();
-    this.dataSource = !!alumnos ? alumnos : [];
+    // let alumnos = this.alumnosService.getAlumnos();
+    // this.dataSource = !!alumnos ? alumnos : [];
   }
 
   ngOnInit(): void {
+    this.reloadLista();
+    this.alumnosService.getAlumnos$().subscribe(alumnos => this.dataSource = alumnos);
   }
 
   eliminarAlumno(dni: string){
     this.alumnosService.deleteAlumno(dni);
-    this.reloadLista();
+    // this.reloadLista();
   }
 
   viewAlumno(dni: string){
     const dialogRef = this.matDialog.open(EditarAlumnoComponent, {
       data: {dni: dni}
     });
-    this.reloadLista();
+    // this.reloadLista();
   }
 
   reloadLista(){
