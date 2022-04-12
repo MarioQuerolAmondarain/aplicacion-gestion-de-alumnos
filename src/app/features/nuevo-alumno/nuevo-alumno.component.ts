@@ -1,13 +1,12 @@
-import { Provincias } from './../../models/provincias.enum';
-import { Paises } from './../../models/paises.enum';
-import { Component, Inject, Input, OnInit, Optional } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Alumno } from 'src/app/models/alumno.model';
-import { AlumnosService } from './../../services/alumnos.service';
-import { Observable } from 'rxjs/internal/Observable';
 import { map, startWith } from 'rxjs';
+import { Observable } from 'rxjs/internal/Observable';
+import { Alumno } from 'src/app/models/alumno.model';
 import { FortalezaPassword } from 'src/app/models/FortalezaPassword';
+import { EventEmitter } from '@angular/core';
+import { AlumnosService } from './../../services/alumnos.service';
+
 @Component({
   selector: 'app-nuevo-alumno',
   templateUrl: './nuevo-alumno.component.html',
@@ -15,6 +14,7 @@ import { FortalezaPassword } from 'src/app/models/FortalezaPassword';
 })
 export class NuevoAlumnoComponent implements OnInit {
   @Input() editar!: Boolean;
+  @Output() alumnoEditado = new EventEmitter();
   nuevoAlumnoForm: FormGroup;
   paises = [
     'Afganistán',
@@ -488,6 +488,7 @@ export class NuevoAlumnoComponent implements OnInit {
           this.nuevoAlumnoForm.get('apellido2')?.value
         )
       );
+      this.alumnoEditado.emit(true);
     }
   }
 
