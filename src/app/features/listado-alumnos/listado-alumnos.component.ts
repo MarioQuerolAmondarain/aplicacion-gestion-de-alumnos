@@ -12,7 +12,7 @@ import { observeNotification } from 'rxjs/internal/Notification';
   templateUrl: './listado-alumnos.component.html',
   styleUrls: ['./listado-alumnos.component.scss'],
 })
-export class ListadoAlumnosComponent implements OnInit{
+export class ListadoAlumnosComponent implements OnInit {
   dataSource!: Alumno[];
   displayedColumns: string[] = [
     'nombre',
@@ -27,32 +27,36 @@ export class ListadoAlumnosComponent implements OnInit{
     'localidad',
     'nick',
     'detalles',
-    "eliminar"
+    'eliminar',
   ];
 
-  constructor(private alumnosService: AlumnosService, private matDialog: MatDialog) {
+  constructor(
+    private alumnosService: AlumnosService,
+    private matDialog: MatDialog
+  ) {
     // let alumnos = this.alumnosService.getAlumnos();
     // this.dataSource = !!alumnos ? alumnos : [];
   }
 
   ngOnInit(): void {
     this.reloadLista();
-    this.alumnosService.getAlumnos$().subscribe(alumnos => this.dataSource = alumnos);
-  }
-
-  eliminarAlumno(dni: string){
-    this.alumnosService.deleteAlumno(dni);
-    // this.reloadLista();
-  }
-
-  viewAlumno(dni: string){
-    const dialogRef = this.matDialog.open(EditarAlumnoComponent, {
-      data: {dni: dni}
+    this.alumnosService.getAlumnos$().subscribe((alumnos) => {
+      this.dataSource = alumnos;
+      this.reloadLista();
     });
-    // this.reloadLista();
   }
 
-  reloadLista(){
+  eliminarAlumno(dni: string) {
+    this.alumnosService.deleteAlumno(dni);
+  }
+
+  viewAlumno(dni: string) {
+    const dialogRef = this.matDialog.open(EditarAlumnoComponent, {
+      data: { dni: dni },
+    });
+  }
+
+  reloadLista() {
     let alumnos = this.alumnosService.getAlumnos();
     this.dataSource = !!alumnos ? alumnos : [];
   }
