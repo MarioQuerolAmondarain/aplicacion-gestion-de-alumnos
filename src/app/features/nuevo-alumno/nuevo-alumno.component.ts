@@ -14,6 +14,7 @@ import { AlumnosService } from './../../services/alumnos.service';
 })
 export class NuevoAlumnoComponent implements OnInit {
   @Input() editar!: Boolean;
+  @Input("alumnoDNI") alumnoEditarDNI!: string;
   @Output() alumnoEditado = new EventEmitter();
   nuevoAlumnoForm: FormGroup;
   paises = [
@@ -299,7 +300,7 @@ export class NuevoAlumnoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.editar && !!this.alumnosService.editarAlumno) {
+    if (this.editar && !!this.alumnosService.getAlumno(this.alumnoEditarDNI)) {
       this.nuevoAlumnoForm.setValue(this.cargarDatosAlumno());
     }
     this.filteredOptionsPaises = this.nuevoAlumnoForm
@@ -413,7 +414,7 @@ export class NuevoAlumnoComponent implements OnInit {
 
 
   cargarDatosAlumno() {
-    let alumno = this.alumnosService.editarAlumno();
+    let alumno = this.alumnosService.getAlumno(this.alumnoEditarDNI);
     return {
       nombre: alumno?.nombre,
       apellido1: alumno?.apellido1,

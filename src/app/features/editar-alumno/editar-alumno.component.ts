@@ -1,5 +1,5 @@
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-editar-alumno',
@@ -7,10 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./editar-alumno.component.scss']
 })
 export class EditarAlumnoComponent implements OnInit {
-
-  constructor(public dialogRef: MatDialogRef<EditarAlumnoComponent>){ }
+  alumnoDNI!: string;
+  constructor(public dialogRef: MatDialogRef<EditarAlumnoComponent>,  @Inject(MAT_DIALOG_DATA) public data: any){ }
 
   ngOnInit(): void {
+    this.alumnoDNI = this.data.dni;
   }
 
   close(){

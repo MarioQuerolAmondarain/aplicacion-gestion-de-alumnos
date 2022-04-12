@@ -48,7 +48,6 @@ export class ListadoAlumnosComponent implements OnInit{
       data: {dni: dni}
     });
     this.reloadLista();
-    this.alumnosService.setAlumnoEdit(dni);
   }
 
   reloadLista(){
