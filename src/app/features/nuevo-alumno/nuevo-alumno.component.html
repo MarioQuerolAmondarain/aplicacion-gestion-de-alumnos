@@ -114,12 +114,13 @@
     <mat-error *ngIf="this.nuevoAlumnoForm.get('nickName')!.invalid">Obligatorio</mat-error>
   </mat-form-field>
 
-  <div>
-    <mat-form-field class="input" appearance="outline" *ngIf="!this.editar" style="width: 100%;">
+  <div *ngIf="!this.editar">
+    <mat-form-field class="input" appearance="outline" style="width: 100%;">
       <mat-label>Contraseña</mat-label>
       <input matInput formControlName="password" type="password" />
     </mat-form-field>
-    <mat-progress-bar mode="determinate" value="{{fortalezaPassword()}}" ></mat-progress-bar>
+    <span class="fortalezaPassword">{{ fortalezaPasswordTexto() }}</span>
+    <mat-progress-bar mode="determinate" value="{{fortalezaPassword()}}"></mat-progress-bar>
   </div>
 </form>
 <br>

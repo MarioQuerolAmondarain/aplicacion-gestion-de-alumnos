@@ -7,7 +7,7 @@ import { Alumno } from 'src/app/models/alumno.model';
 import { AlumnosService } from './../../services/alumnos.service';
 import { Observable } from 'rxjs/internal/Observable';
 import { map, startWith } from 'rxjs';
-
+import { FortalezaPassword } from 'src/app/models/FortalezaPassword';
 @Component({
   selector: 'app-nuevo-alumno',
   templateUrl: './nuevo-alumno.component.html',
@@ -270,9 +270,7 @@ export class NuevoAlumnoComponent implements OnInit {
 
   constructor(public alumnosService: AlumnosService) {
     this.nuevoAlumnoForm = new FormGroup({
-      nombre: new FormControl('', [
-        Validators.required,
-      ]),
+      nombre: new FormControl('', [Validators.required]),
       apellido1: new FormControl('', [Validators.required]),
       apellido2: new FormControl(''),
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -293,7 +291,10 @@ export class NuevoAlumnoComponent implements OnInit {
       ]),
       localidad: new FormControl('', [Validators.required]),
       nickName: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required]),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(6),
+      ]),
     });
   }
 
@@ -316,10 +317,6 @@ export class NuevoAlumnoComponent implements OnInit {
   }
 
   isValid(): boolean {
-    if (this.editar) {
-      return true;
-    }
-
     if (
       this.nuevoAlumnoForm.get('nombre')!.invalid ||
       this.nuevoAlumnoForm.get('apellido1')!.invalid ||
@@ -332,35 +329,36 @@ export class NuevoAlumnoComponent implements OnInit {
       this.nuevoAlumnoForm.get('provincia')!.invalid ||
       this.nuevoAlumnoForm.get('codigoPostal')!.invalid ||
       this.nuevoAlumnoForm.get('localidad')!.invalid ||
-      this.nuevoAlumnoForm.get('nickName')!.invalid ||
-      this.nuevoAlumnoForm.get('password')!.invalid ||
-      this.paises.find((pais) => {
-        return pais === this.nuevoAlumnoForm.get('pais')!.value;
-      }) ||
-      this.fortalezaPassword() < 8
+      this.nuevoAlumnoForm.get('nickName')!.invalid
+      // !!this.paises.find((pais) => {
+      //   return pais === this.nuevoAlumnoForm.get('pais')!.value;
+      // }) ||
     ) {
-      console.log("no válido");
       return false;
     }
 
     if (
-      !this.provincias.find((pais) => {
-        return pais === this.nuevoAlumnoForm.get('pais')!.value;
+      !this.provincias.find((provincia) => {
+        return provincia === this.nuevoAlumnoForm.get('provincia')!.value;
       }) &&
       this.nuevoAlumnoForm.get('pais')?.value === 'España'
     ) {
-      console.log("no provincia");
       return false;
     }
-    console.log("Es válido");
+
+    if (this.nuevoAlumnoForm.get('password')!.invalid && !this.editar) {
+      return false;
+    }
     return true;
   }
 
   fortalezaPassword(): number {
     let password = this.nuevoAlumnoForm.get('password')?.value;
-    let fortaleza = 0 ;
+    let fortaleza = 0;
     let maximoPuntos = true;
-
+    if (password.length < 6) {
+      return 0;
+    }
     if (7 <= password.length && password.length <= 8) {
       fortaleza++;
       maximoPuntos = false;
@@ -383,7 +381,7 @@ export class NuevoAlumnoComponent implements OnInit {
       maximoPuntos = false;
     }
 
-    if(/[a-z]/.test(password) && /[A-Z]/.test(password)){
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) {
       fortaleza += 2;
     }
 
@@ -397,8 +395,22 @@ export class NuevoAlumnoComponent implements OnInit {
     if (maximoPuntos) {
       fortaleza++;
     }
-    return fortaleza * 8.3;
+    return fortaleza * (100 / 12);
   }
+
+  fortalezaPasswordTexto(): string{
+    if(this.fortalezaPassword() < FortalezaPassword.MuyDebil){
+      return "Muy débil"
+    }
+    if(this.fortalezaPassword() < FortalezaPassword.Debil){
+      return "Débil"
+    }
+    if(this.fortalezaPassword() < FortalezaPassword.Moderada){
+      return "Moderada";
+    }
+    return "Fuerte";
+  }
+
 
   cargarDatosAlumno() {
     let alumno = this.alumnosService.editarAlumno();
@@ -437,6 +449,11 @@ export class NuevoAlumnoComponent implements OnInit {
 
   submitForm() {
     if (!this.editar) {
+      if (this.fortalezaPassword() < FortalezaPassword.Debil) {
+        if (!this.contraseniaDebil()) {
+          return;
+        }
+      }
       this.alumnosService.addAlumno(
         new Alumno(
           this.nuevoAlumnoForm.get('nombre')?.value,
@@ -472,5 +489,9 @@ export class NuevoAlumnoComponent implements OnInit {
         )
       );
     }
+  }
+
+  private contraseniaDebil() {
+    return confirm('Contraseña débil ¿continuar?');
   }
 }
