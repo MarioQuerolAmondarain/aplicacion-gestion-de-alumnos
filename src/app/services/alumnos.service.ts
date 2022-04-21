@@ -35,14 +35,13 @@ export class AlumnosService {
   }
 
   deleteAlumno(dni: string) {
-    for(let index = 0; index < this.alumnos.length; index++)
-    {
+    for (let index = 0; index < this.alumnos.length; index++) {
       let element = this.alumnos[index];
       if (element.dni === dni) {
         this.alumnos.splice(index, 1);
         this.actulizarLocalStorage();
       }
-    };
+    }
   }
 
   updateAlumno(alumnoRef: Alumno) {
@@ -94,8 +93,14 @@ export class AlumnosService {
     });
   }
 
-  actulizarLocalStorage(){
+  actulizarLocalStorage() {
     localStorage.setItem('alumnos', JSON.stringify(this.alumnos));
     this.alumnos$.next(this.alumnos);
+  }
+
+  existeAlumnoDNI(dni: string): boolean {
+    return !!this.alumnos.find((alumno) => {
+      return alumno.dni === dni;
+    });
   }
 }

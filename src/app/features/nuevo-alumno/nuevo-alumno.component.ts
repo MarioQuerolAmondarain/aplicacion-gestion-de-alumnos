@@ -296,6 +296,10 @@ export class NuevoAlumnoComponent implements OnInit {
         Validators.required,
         Validators.minLength(6),
       ]),
+      repetirPassword: new FormControl('', [
+        Validators.required,
+        Validators.minLength(6),
+      ]),
     });
   }
 
@@ -455,6 +459,10 @@ export class NuevoAlumnoComponent implements OnInit {
           return;
         }
       }
+      if(this.alumnosService.existeAlumnoDNI(this.nuevoAlumnoForm.get('dni')?.value)){
+        alert("Ya existe un alumno con este DNI");
+        return;
+      }
       this.alumnosService.addAlumno(
         new Alumno(
           this.nuevoAlumnoForm.get('nombre')?.value,
@@ -495,5 +503,14 @@ export class NuevoAlumnoComponent implements OnInit {
 
   private contraseniaDebil() {
     return confirm('Contraseña débil ¿continuar?');
+  }
+
+  dniValido(){
+    let alfabeto = "TRWAGMYFPDXBNJZSQVHLCKET";
+    let dni = this.nuevoAlumnoForm.get('dni')?.value;
+    let numeros = parseInt(dni.substring(0, 8), 10);
+    let letra = dni.substring(8).toUpperCase();
+
+    return (alfabeto.charAt(numeros%23) === letra);
   }
 }

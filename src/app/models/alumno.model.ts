@@ -42,6 +42,11 @@ export class Alumno {
     this.provincia = provincia;
     this.tlf = tlf;
     this.tlf2 = tlf2;
-    this.password = password;
+    this.password = this.hash(password);
+    console.log(this.password);
+  }
+
+  hash(password: string): string{
+    return password;
   }
 }

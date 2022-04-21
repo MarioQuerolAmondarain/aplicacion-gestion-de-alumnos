@@ -25,9 +25,11 @@
   <mat-form-field class="input" appearance="outline">
     <mat-label>DNI</mat-label>
     <input matInput formControlName="dni" type="text" />
-    <mat-error *ngIf="this.nuevoAlumnoForm.get('dni')!.invalid">DNI no válido</mat-error>
+    <mat-error>DNI no válido</mat-error>
+    <mat-error *ngIf="dniValido()" class="error">
+      Contraseñas distintas
+    </mat-error>
   </mat-form-field>
-
   <mat-form-field class="input" appearance="outline">
     <mat-label>Teléfono</mat-label>
     <input matInput formControlName="tlf" type="text" />
@@ -121,6 +123,16 @@
     </mat-form-field>
     <span class="fortalezaPassword">{{ fortalezaPasswordTexto() }}</span>
     <mat-progress-bar mode="determinate" value="{{fortalezaPassword()}}"></mat-progress-bar>
+  </div>
+  <div *ngIf="!this.editar">
+    <mat-form-field class="input" appearance="outline" style="width: 100%;">
+      <mat-label>Repetir contraseña</mat-label>
+      <input matInput formControlName="repetirPassword" type="password" />
+      <mat-error>Contraseña no válida</mat-error>
+      <mat-error *ngIf="this.nuevoAlumnoForm.get('password')!.value !== this.nuevoAlumnoForm.get('repetirPassword')!.value" class="error">
+        Contraseñas distintas
+      </mat-error>
+    </mat-form-field>
   </div>
 </form>
 <br>

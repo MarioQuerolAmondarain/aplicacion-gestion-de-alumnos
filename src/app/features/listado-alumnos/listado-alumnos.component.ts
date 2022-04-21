@@ -34,8 +34,6 @@ export class ListadoAlumnosComponent implements OnInit {
     private alumnosService: AlumnosService,
     private matDialog: MatDialog
   ) {
-    // let alumnos = this.alumnosService.getAlumnos();
-    // this.dataSource = !!alumnos ? alumnos : [];
   }
 
   ngOnInit(): void {
