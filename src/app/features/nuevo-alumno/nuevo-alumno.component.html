@@ -129,13 +129,27 @@
       <mat-label>Repetir contraseña</mat-label>
       <input matInput formControlName="repetirPassword" type="password" />
       <mat-error>Contraseña no válida</mat-error>
-      <mat-error *ngIf="this.nuevoAlumnoForm.get('password')!.value !== this.nuevoAlumnoForm.get('repetirPassword')!.value" class="error">
-        Contraseñas distintas
-      </mat-error>
     </mat-form-field>
   </div>
 </form>
 <br>
+
+<div class="errores" *ngIf="!this.dniValido() || !this.passwordIguales() || !this.codigoPostalValido() || !this.provinciaEspaniolaValida()">
+  <span>Errores</span>
+  <div *ngIf="!this.dniValido()">
+    El DNI no es válido
+  </div>
+  <div *ngIf="!this.passwordIguales()">
+    Las contraseñas no coinciden
+  </div>
+  <div *ngIf="!this.codigoPostalValido()">
+    El código postal no es válido para España
+  </div>
+  <div *ngIf="!this.provinciaEspaniolaValida()">
+    Provincia no española
+  </div>
+</div>
+
 <button mat-raised-button color="primary" (click)="this.submitForm()" [disabled]="!isValid()">
   <span *ngIf="!this.editar">Añadir alumno</span>
   <span *ngIf="this.editar">Actualizar alumno</span>

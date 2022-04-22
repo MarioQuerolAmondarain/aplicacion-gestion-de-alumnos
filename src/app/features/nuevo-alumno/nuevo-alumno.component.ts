@@ -14,7 +14,7 @@ import { AlumnosService } from './../../services/alumnos.service';
 })
 export class NuevoAlumnoComponent implements OnInit {
   @Input() editar!: Boolean;
-  @Input("alumnoDNI") alumnoEditarDNI!: string;
+  @Input('alumnoDNI') alumnoEditarDNI!: string;
   @Output() alumnoEditado = new EventEmitter();
   nuevoAlumnoForm: FormGroup;
   paises = [
@@ -281,9 +281,9 @@ export class NuevoAlumnoComponent implements OnInit {
       ]),
       tlf: new FormControl('', [
         Validators.required,
-        Validators.pattern('[0-9]{9}'),
+        Validators.pattern('[8|9|6|7][0-9]{8}'),
       ]),
-      tlf2: new FormControl('', [Validators.pattern('[0-9]{9}')]),
+      tlf2: new FormControl('', [Validators.pattern('[8|9|6|7][0-9]{8}')]),
       pais: new FormControl('', [Validators.required]),
       provincia: new FormControl('', [Validators.required]),
       codigoPostal: new FormControl('', [
@@ -323,6 +323,59 @@ export class NuevoAlumnoComponent implements OnInit {
 
   isValid(): boolean {
     if (
+      this.formularioValido() ||
+      !this.dniValido() ||
+      !this.codigoPostalValido() ||
+      !this.provinciaEspaniolaValida()
+    ) {
+      return false;
+    }
+
+    if (
+      (this.nuevoAlumnoForm.get('password')!.invalid ||
+        this.nuevoAlumnoForm.get('repetirPassword')!.invalid ||
+        !this.passwordIguales()) &&
+      this.alumnosService.existeAlumnoDNI(
+        this.nuevoAlumnoForm.get('dni')?.value
+      ) &&
+      !this.editar
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+
+  passwordIguales(): boolean {
+    return (
+      this.nuevoAlumnoForm.get('password')!.value ===
+      this.nuevoAlumnoForm.get('repetirPassword')!.value
+    );
+  }
+
+  codigoPostalValido(): boolean {
+    if (this.nuevoAlumnoForm.get('pais')!.value !== 'España') {
+      return true;
+    }
+
+    return (
+      1000 <= this.nuevoAlumnoForm.get('codigoPostal')!.value &&
+      this.nuevoAlumnoForm.get('codigoPostal')!.value <= 52999
+    );
+  }
+
+  provinciaEspaniolaValida(): boolean {
+    if (this.nuevoAlumnoForm.get('pais')?.value !== 'España') {
+      return true;
+    }
+
+    return !!this.provincias.find((provincia) => {
+      return provincia === this.nuevoAlumnoForm.get('provincia')!.value;
+    });
+  }
+
+  formularioValido(): boolean {
+    return (
       this.nuevoAlumnoForm.get('nombre')!.invalid ||
       this.nuevoAlumnoForm.get('apellido1')!.invalid ||
       this.nuevoAlumnoForm.get('apellido2')!.invalid ||
@@ -335,87 +388,73 @@ export class NuevoAlumnoComponent implements OnInit {
       this.nuevoAlumnoForm.get('codigoPostal')!.invalid ||
       this.nuevoAlumnoForm.get('localidad')!.invalid ||
       this.nuevoAlumnoForm.get('nickName')!.invalid
-      // !!this.paises.find((pais) => {
-      //   return pais === this.nuevoAlumnoForm.get('pais')!.value;
-      // }) ||
-    ) {
-      return false;
-    }
-
-    if (
-      !this.provincias.find((provincia) => {
-        return provincia === this.nuevoAlumnoForm.get('provincia')!.value;
-      }) &&
-      this.nuevoAlumnoForm.get('pais')?.value === 'España'
-    ) {
-      return false;
-    }
-
-    if (this.nuevoAlumnoForm.get('password')!.invalid && !this.editar) {
-      return false;
-    }
-    return true;
+    );
   }
 
   fortalezaPassword(): number {
     let password = this.nuevoAlumnoForm.get('password')?.value;
     let fortaleza = 0;
     let maximoPuntos = true;
+
     if (password.length < 6) {
       return 0;
     }
+
     if (7 <= password.length && password.length <= 8) {
       fortaleza++;
       maximoPuntos = false;
     } else if (9 <= password.length && password.length <= 12) {
-      maximoPuntos = false;
       fortaleza += 2;
+      maximoPuntos = false;
     } else if (12 <= password.length) {
       fortaleza += 3;
     }
 
-    if (/[A-Z]/.test(password)) {
+    if (/[a-z]/.test(password) || /[A-Z]/.test(password)) {
       fortaleza++;
-    } else {
-      maximoPuntos = false;
-    }
-
-    if (/[a-z]/.test(password)) {
-      fortaleza++;
-    } else {
+    } else{
       maximoPuntos = false;
     }
 
     if (/[a-z]/.test(password) && /[A-Z]/.test(password)) {
       fortaleza += 2;
-    }
-
-    // Intervalo de simbolos en ASCII
-    if (/[!-@]/.test(password)) {
-      fortaleza++;
-    } else {
+    }else{
       maximoPuntos = false;
     }
 
-    if (maximoPuntos) {
+    if(/[0-9]/.test(password)){
       fortaleza++;
+    }else{
+      maximoPuntos = false;
     }
-    return fortaleza * (100 / 12);
+
+    if (/[$-/:-?{-~!"^_`\[\]]/.test(password)) {
+      fortaleza += 2;
+    }else{
+      maximoPuntos = false;
+    }
+
+    if(maximoPuntos){
+      fortaleza += 2;
+    }
+    return fortaleza * (100 / 8);
   }
 
-  fortalezaPasswordTexto(): string{
-    if(this.fortalezaPassword() < FortalezaPassword.MuyDebil){
-      return "Muy débil"
+  fortalezaPasswordTexto(): string {
+    if (this.fortalezaPassword()/(100/8) <= FortalezaPassword.MuyDebil) {
+      return 'Muy débil';
     }
-    if(this.fortalezaPassword() < FortalezaPassword.Debil){
-      return "Débil"
+    if (this.fortalezaPassword()/(100/8) <= FortalezaPassword.Debil) {
+      return 'Débil';
     }
-    if(this.fortalezaPassword() < FortalezaPassword.Moderada){
-      return "Moderada";
+    if (this.fortalezaPassword()/(100/8) <= FortalezaPassword.Moderada) {
+      return 'Moderada';
     }
-    return "Fuerte";
+    if (this.fortalezaPassword()/(100/8) <= FortalezaPassword.Fuerte) {
+      return 'Fuerte';
+    }
+    return 'Muy Fuerte';
   }
-
 
   cargarDatosAlumno() {
     let alumno = this.alumnosService.getAlumno(this.alumnoEditarDNI);
@@ -433,6 +472,7 @@ export class NuevoAlumnoComponent implements OnInit {
       localidad: alumno?.localidad,
       nickName: alumno?.nickName,
       password: '',
+      repetirPassword: '',
     };
   }
 
@@ -458,10 +498,6 @@ export class NuevoAlumnoComponent implements OnInit {
         if (!this.contraseniaDebil()) {
           return;
         }
-      }
-      if(this.alumnosService.existeAlumnoDNI(this.nuevoAlumnoForm.get('dni')?.value)){
-        alert("Ya existe un alumno con este DNI");
-        return;
       }
       this.alumnosService.addAlumno(
         new Alumno(
@@ -505,12 +541,12 @@ export class NuevoAlumnoComponent implements OnInit {
     return confirm('Contraseña débil ¿continuar?');
   }
 
-  dniValido(){
-    let alfabeto = "TRWAGMYFPDXBNJZSQVHLCKET";
+  dniValido() {
+    let alfabeto = 'TRWAGMYFPDXBNJZSQVHLCKET';
     let dni = this.nuevoAlumnoForm.get('dni')?.value;
     let numeros = parseInt(dni.substring(0, 8), 10);
     let letra = dni.substring(8).toUpperCase();
 
-    return (alfabeto.charAt(numeros%23) === letra);
+    return alfabeto.charAt(numeros % 23) === letra;
   }
 }

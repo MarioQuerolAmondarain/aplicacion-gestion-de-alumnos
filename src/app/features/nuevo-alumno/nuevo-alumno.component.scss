@@ -2,3 +2,18 @@ form{
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
 }
+.errores{
+  padding: 10px;
+  border: 2px solid black;
+  width: fit-content;
+  margin: 10px;
+  border-radius: 10px;
+  span{
+    font-weight: bold;
+    color: red;
+    font-size: large;
+  }
+  div{
+    margin-left: 20px;
+  }
+}

@@ -1,6 +1,6 @@
 export enum FortalezaPassword{
-  MuyDebil = 17,
-  Debil = 67,
-  Moderada = 75,
-  MuyFuerte = 83
+  MuyDebil = 2,
+  Debil = 5,
+  Moderada = 7,
+  Fuerte = 9
 }
