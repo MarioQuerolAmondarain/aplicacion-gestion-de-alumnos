@@ -1,6 +1,5 @@
-
+import * as CryptoJS from 'crypto-js';
 export class Alumno {
-  // TODO hacer atributos privados y crear getter y setter
   nombre: string;
   apellido1: string;
   apellido2?: string;
@@ -47,6 +46,6 @@ export class Alumno {
   }
 
   hash(password: string): string{
-    return password;
+    return CryptoJS.SHA3(password).toString();
   }
 }
