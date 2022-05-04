@@ -214,8 +214,11 @@ export class NuevoAlumnoComponent implements OnInit {
   }
 
   submitForm() {
+    if(!this.isValid()){
+      return;
+    }
     if (!this.editar) {
-      if (this.fortalezaPassword() < FortalezaPassword.Debil) {
+      if (this.fortalezaPassword() < FortalezaPassword.Debil && this.nuevoAlumnoForm.get('password')?.valid) {
         if (!this.contraseniaDebil()) {
           return;
         }
